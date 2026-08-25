@@ -27,6 +27,7 @@ Production-grade **MediationZone 9 (InfoZone)** APL Workflow and Aggregation Con
 ├── WFL_PlanRenew_Aggregation.apl   # Production APL Workflow (sessionInit, consume, timeout)
 ├── PRF_AGG_PlanRenew.json          # Aggregation Profile Config (Key: dupValue)
 ├── PRF_PlanRenew_OpenAPI.json      # OpenAPI 3.0 Spec Profile
+├── MZ9_Log_Diagnostics_Guide.md    # Log Diagnostics & Troubleshooting Guide
 └── README.md                       # Project Overview
 ```
 
