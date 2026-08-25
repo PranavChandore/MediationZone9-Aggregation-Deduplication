@@ -1,0 +1,62 @@
+{
+  "Key": "MZ1749623491100",
+  "Name": "PRF_AGG_PlanRenewal",
+  "Type": "Aggregation Profile",
+  "Version": 1,
+  "Folder": "PlanOperation_API",
+  "Owner": "mzadmin",
+  "Is Valid": true,
+  "Access Groups -read -write -execute": [
+    "Administrator",
+    "Administrator",
+    "Administrator"
+  ],
+  "Data": {
+    "Association config": [
+      {
+        "UDR type": {
+          "TypeName": "PlanOperation_API.UFL_PlanRenewal_Data.PlanRenewalReqInt",
+          "FormatName": "PlanOperation_API.UFL_PlanRenewal_Data",
+          "$Type": "dr.UltraClientInfo",
+          "$Version": 1.0
+        },
+        "Association rules": [
+          {
+            "Primary expression": "",
+            "ID field list": [
+              "dupValue"
+            ],
+            "Additional expression": "",
+            "Create session on failure": true,
+            "$Version": 1.0
+          }
+        ],
+        "$Version": 1.0
+      }
+    ],
+    "Storage config": {
+      "Directory": "/mz8/Agg_Session/PlanRenewal/",
+      "Partial File Count": 10,
+      "Max Session Count": 100000,
+      "Instance Unique Storage": false,
+      "This Version": 1.0,
+      "ExtRef Version": 1.0,
+      "ExtRef Map": [],
+      "$Type": "dr.FileStorageConfiguratorExtRef",
+      "$Version": 2.0
+    },
+    "UDR Type": {
+      "TypeName": "PlanOperation_API.UFL_PlanRenewal_Data.PlanRenewalSession",
+      "FormatName": "PlanOperation_API.UFL_PlanRenewal_Data",
+      "$Type": "dr.UltraClientInfo",
+      "$Version": 1.0
+    },
+    "$Type": "dr.AggregationProfileConfig",
+    "$Version": 1.0
+  },
+  "documentation": "MediationZone 9 Real-Time Aggregation Profile for EarthLink Plan Renewal Deduplication",
+  "Dynamic Parameters": [],
+  "Is Dry Run": false,
+  "$Type": "dr.Configuration",
+  "$Version": 10.1
+}

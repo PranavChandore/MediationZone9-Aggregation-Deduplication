@@ -1,0 +1,23 @@
+{
+  "Key": "MZ1623821163399",
+  "Name": "PRF_PlanRenewal_OpenAPI",
+  "Type": "Open API Profile",
+  "Version": 1,
+  "Folder": "PlanOperation_API",
+  "Owner": "mzadmin",
+  "Is Valid": true,
+  "Access Groups -read -write -execute": [
+    "All",
+    "All",
+    "All"
+  ],
+  "Data": {
+    "scheme": "openapi: 3.0.0\ninfo:\n  title: EarthLink Plan Renewal & Payment Aggregation API\n  description: Real-time REST API for Subscriber Plan Renewals with Deduplication & SAP HANA Posting\n  version: 1.0.0\nservers:\n  - url: 'http://10.4.4.128:8090/v1'\n    description: EarthLink MZ Development Server\ntags:\n  - name: planRenewal\n    description: Operations for Subscriber Plan Renewals\npaths:\n  /plan/renew:\n    post:\n      tags:\n        - planRenewal\n      summary: Renew subscriber plan with duplicate request interception\n      operationId: renewPlan\n      requestBody:\n        required: true\n        content:\n          application/json:\n            schema:\n              $ref: '#/components/schemas/PlanRenewalRequest'\n      responses:\n        '200':\n          description: Plan Renewal successfully processed and posted to SAP HANA\n          content:\n            application/json:\n              schema:\n                $ref: '#/components/schemas/PlanRenewalResponseSuccess'\n        '409':\n          description: Duplicate request intercepted by MediationZone Aggregation Profile\n          content:\n            application/json:\n              schema:\n                $ref: '#/components/schemas/PlanRenewalResponseDuplicate'\ncomponents:\n  schemas:\n    PlanRenewalRequest:\n      type: object\n      required:\n        - transactionId\n        - subscriberId\n        - planId\n        - amount\n      properties:\n        transactionId:\n          type: string\n          example: 'TXN_RENEW_99001'\n        subscriberId:\n          type: string\n          example: 'SUB_44012'\n        planId:\n          type: string\n          example: 'PLAN_FIBER_100M'\n        amount:\n          type: number\n          format: double\n          example: 45000.0\n        channel:\n          type: string\n          example: 'MOBILE_APP'\n    PlanRenewalResponseSuccess:\n      type: object\n      properties:\n        status:\n          type: string\n          example: 'SUCCESS'\n        message:\n          type: string\n          example: 'Plan renewal successfully processed and posted to SAP HANA'\n        transactionId:\n          type: string\n        subscriberId:\n          type: string\n        planId:\n          type: string\n        amount:\n          type: number\n        sapInvoiceDocNo:\n          type: string\n          example: '300098445'\n    PlanRenewalResponseDuplicate:\n      type: object\n      properties:\n        status:\n          type: string\n          example: 'FAILED'\n        errorCode:\n          type: string\n          example: 'ERR_DUPLICATE_REQUEST'\n        message:\n          type: string\n          example: 'Duplicate Request detected by MZ Aggregation Profile'\n        transactionId:\n          type: string\n        sessionCount:\n          type: integer\n          example: 2\n",
+    "$Type": "dr.OpenApiProfileData",
+    "$Version": 1.0
+  },
+  "documentation": "OpenAPI 3.0 specification for EarthLink Plan Renewal REST API",
+  "Is Dry Run": false,
+  "$Type": "dr.Configuration",
+  "$Version": 10.1
+}
