@@ -1,14 +1,14 @@
 {
-  "Key": "MZ1990423188710",
-  "Name": "PRF_AGG_ProductAPI",
+  "Key": "MZ1749623491100",
+  "Name": "PRF_AGG_PlanRenew",
   "Type": "Aggregation Profile",
-  "Folder": "ProductAPI",
+  "Folder": "PlanRenew",
   "Data": {
     "Association config": [
       {
         "UDR type": {
-          "TypeName": "ProductAPI.UFL_Product_API.DuplicateCheckInt",
-          "FormatName": "ProductAPI.UFL_Product_API"
+          "TypeName": "PlanRenew.UFL_PlanRenew.DuplicateCheckINT",
+          "FormatName": "PlanRenew.UFL_PlanRenew"
         },
         "Association rules": [
           {
@@ -21,13 +21,13 @@
       }
     ],
     "Storage config": {
-      "Directory": "/mz8/Agg_Session/ProductAPI/",
+      "Directory": "/mz8/Agg_Session/PlanRenew/",
       "Partial File Count": 10,
       "Max Session Count": 100000
     },
     "UDR Type": {
-      "TypeName": "ProductAPI.UFL_Product_API.ProductSession",
-      "FormatName": "ProductAPI.UFL_Product_API"
+      "TypeName": "PlanRenew.UFL_PlanRenew.DuplicateCheck",
+      "FormatName": "PlanRenew.UFL_PlanRenew"
     }
   }
 }

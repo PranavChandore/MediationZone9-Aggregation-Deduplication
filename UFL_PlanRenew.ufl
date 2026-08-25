@@ -1,0 +1,29 @@
+// ============================================================================
+// DigitalRoute MediationZone 9 — Ultra Data Format
+// Format Name: PlanRenew.UFL_PlanRenew
+// Endpoint: https://elcmqaap1.earthlink.iq:8010/pranav/v1/plan/renew
+// ============================================================================
+
+// 1. Session Storage UDR (Stored in-memory by Aggregation Agent)
+session DuplicateCheck {
+    string dupValue;            // Aggregation Key: SUB_ID + "_" + TRANS_ID
+    int count;                  // Request counter per sliding window
+    drudr endUserOnboardUdr; 
+    drudr cycleReqUDR;
+};
+
+// 2. Internal Container UDR (Passed between Workflow and Aggregation Agent)
+internal DuplicateCheckINT {
+    string errCode;             // "ERR_DUPLICATE_REQUEST" or ""
+    string dupValue;            // Aggregation Key Signature
+    int count;                  // Current session count
+    drudr ResUDR;               // Holds decoded PlanRenewReq UDR
+    drudr cycleReqUDR;          // Holds original HTTP REST Cycle UDR
+};
+
+// 3. Decoded HTTP Request Payload UDR
+internal PlanRenewReq {
+    string TRANS_ID;            // Transaction ID
+    string SUB_ID;              // Subscriber ID
+    double AMT;                 // Renewal Amount
+};

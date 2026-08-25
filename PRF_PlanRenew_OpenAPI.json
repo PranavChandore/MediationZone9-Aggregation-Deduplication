@@ -1,0 +1,17 @@
+{
+  "Key": "MZ1623821163399",
+  "Name": "PRF_PlanRenew_OpenAPI",
+  "Type": "Open API Profile",
+  "Version": 1,
+  "Folder": "PlanRenew",
+  "Owner": "mzadmin",
+  "Is Valid": true,
+  "Data": {
+    "scheme": "openapi: 3.0.0\ninfo:\n  title: EarthLink Plan Renewal REST API\n  description: Real-time REST API for Subscriber Plan Renewals with Deduplication & SAP Integration\n  version: 1.0.0\nservers:\n  - url: 'https://elcmqaap1.earthlink.iq:8010/pranav/v1'\npaths:\n  /plan/renew:\n    post:\n      summary: Renew subscriber plan with duplicate request interception\n      operationId: renewPlan\n      requestBody:\n        required: true\n        content:\n          application/json:\n            schema:\n              type: object\n              required:\n                - TRANS_ID\n                - SUB_ID\n                - AMT\n              properties:\n                TRANS_ID:\n                  type: string\n                  example: 'TXN_99001'\n                SUB_ID:\n                  type: string\n                  example: 'SUB_44012'\n                AMT:\n                  type: number\n                  example: 45000.0\n      responses:\n        '200':\n          description: Plan Renewal successfully processed and posted to SAP\n        '409':\n          description: Duplicate request intercepted by MediationZone Aggregation Profile\n",
+    "$Type": "dr.OpenApiProfileData",
+    "$Version": 1.0
+  },
+  "Is Dry Run": false,
+  "$Type": "dr.Configuration",
+  "$Version": 10.1
+}

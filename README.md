@@ -1,37 +1,61 @@
-# AggregationLearn — MediationZone 9 (InfoZone) End-to-End Aggregation & Request Processing
+# MediationZone 9 — EarthLink Plan Renew Aggregation & Deduplication
 
-This project contains the complete documentation, Ultra formats, Aggregation profiles, production APL scripts, and runnable simulations of **MediationZone 9 (InfoZone)** Aggregation, Deduplication, REST Server Agents, and SAP HANA posting.
-
----
-
-## 📁 Repository Files
-
-```
-AggregationLearn/
-│
-├── FULL_CODE_REQUEST_PROCESSING_GUIDE.md     # Complete step-by-step code request processing guide
-├── REAL_MZ_PRODUCTION_AGGREGATION_ANALYSIS.md # Production QAS MZ Aggregation Profile & APL analysis
-├── REST_AGENT_WITH_AGGREGATION.md            # REST Server Agent + OpenAPI + Aggregation guide
-├── AGGREGATION_IN_MEDIATIONZONE9.md          # Architectural guide on MZ9 Aggregation & Deduplication
-│
-├── UFL_PlanRenewal_Data.ufl                  # Ultra Format specification file
-├── PRF_AGG_PlanRenewal.json                  # Aggregation Profile configuration export JSON
-├── PRF_PlanRenewal_OpenAPI.json              # OpenAPI 3.0 REST endpoint specification
-│
-├── WFL_PlanRenewal_Aggregation.apl           # Production APL workflow script
-├── WFL_Payment_Deduplication_Aggregation.apl # Standard MZ9 APL workflow script example
-├── run_e2e_plan_renewal_pipeline.py          # Complete E2E HTTP REST + Aggregation + SAP DB application
-├── production_mz_aggregation_demo.py         # Simulation of exact production WalletAPI session.count logic
-├── rest_agent_aggregation_server.py          # HTTP REST Server Agent + Aggregation Engine demo
-└── aggregation_demo.py                       # Batch/stream UDR aggregation & ECS error queue demo
-```
+Production-grade **MediationZone 9 (InfoZone)** APL Workflow and Aggregation Configuration for EarthLink Subscriber Plan Renewals.
 
 ---
 
-## ⚡ How to Run the End-to-End Pipeline
+## 📌 Endpoint & Payload Specification
 
-Run the end-to-end EarthLink Plan Renewal & Payment Aggregation Pipeline directly in your terminal:
+* **Target URL**: `https://elcmqaap1.earthlink.iq:8010/pranav/v1/plan/renew`
+* **HTTP Method**: `POST`
+* **Content-Type**: `application/json`
+* **JSON Payload**:
+  ```json
+  {
+      "TRANS_ID": "TXN_99001",
+      "SUB_ID": "SUB_44012",
+      "AMT": "45000"
+  }
+  ```
 
-```bash
-python run_e2e_plan_renewal_pipeline.py
+---
+
+## 📁 Repository Structure
+
 ```
+├── UFL_PlanRenew.ufl               # Ultra Format (DuplicateCheck, DuplicateCheckINT, PlanRenewReq)
+├── WFL_PlanRenew_Aggregation.apl   # Production APL Workflow (sessionInit, consume, timeout)
+├── PRF_AGG_PlanRenew.json          # Aggregation Profile Config (Key: dupValue)
+├── PRF_PlanRenew_OpenAPI.json      # OpenAPI 3.0 Spec Profile
+└── README.md                       # Project Overview
+```
+
+---
+
+## ⚙️ Workflow Execution Flow
+
+```
+Client POST /pranav/v1/plan/renew
+         │
+         ▼
+REST Server Agent (Decodes JSON payload into PlanRenewReq)
+         │
+         ▼
+Package into DuplicateCheckINT (dupValue = SUB_ID + "_" + TRANS_ID)
+         │
+         ▼
+Real-Time Aggregation Agent (PRF_AGG_PlanRenew)
+         │
+         ├── session.count == 1 ──► Route to "toSAP" (HTTP 200 OK)
+         └── session.count >= 2 ──► Route to "dupRes" (HTTP 409 Conflict) [Blocked!]
+```
+
+---
+
+## 🧪 Request Interception Matrix
+
+| Request | Payload Signature | Aggregation Key (`dupValue`) | `session.count` | Outcome | Hits SAP? |
+|:---|:---|:---|:---:|:---|:---:|
+| **Request 1** | `SUB_44012` + `TXN_99001` | `SUB_44012_TXN_99001` | **1** | **`HTTP 200 OK`** | ✅ **YES** |
+| **Request 2 (Retry)** | `SUB_44012` + `TXN_99001` | `SUB_44012_TXN_99001` | **2** | **`HTTP 409 Conflict`** | ❌ **NO (Blocked)** |
+| **Request 3 (New)** | `SUB_44012` + `TXN_99002` | `SUB_44012_TXN_99002` | **1** | **`HTTP 200 OK`** | ✅ **YES** |
